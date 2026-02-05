@@ -1,0 +1,60 @@
+﻿@page "/produtos"
+@inject HttpClient http
+@using MobileCrudPwa.Client.DTOs
+ 
+
+<h3>Lista de Produtos</h3>
+
+@if (carregando)
+{
+    <p>Carregando produtos...</p>
+}
+else if (produtos == null || produtos.Count == 0)
+{
+    <p>Nenhum produto encontrado.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var produto in produtos)
+            {
+                <tr>
+                    <td>@produto.Id</td>
+                    <td>@produto.Nome</td>
+                    <td>@produto.Preco.ToString("C")</td>
+                    <td>@produto.Estoque</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ProdutoDto> produtos = [];
+    private bool carregando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            produtos = await http.GetFromJsonAsync<List<ProdutoDto>>("https://localhost:7287/api/produtos");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar produtos: {ex.Message}");
+        }
+        finally
+        {
+            carregando = false;
+        }
+    }
+}

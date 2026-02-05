@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MobileCrudPwa.Api.Models;
 
 namespace MobileCrudPwa.Api.Data
 {
@@ -7,6 +8,8 @@ namespace MobileCrudPwa.Api.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+
+        public DbSet<Produto> Produtos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
